@@ -1,3 +1,4 @@
+import os
 import webbrowser
 import threading
 import time
@@ -52,8 +53,12 @@ if __name__ == '__main__':
     print("🌐 Truy cập: http://127.0.0.1:5000")
     print("=" * 65)
     
-    # Tự động mở trình duyệt
-    threading.Thread(target=open_browser, daemon=True).start()
+    # Lấy port từ biến môi trường (phục vụ deploy Render / Cloud)
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Tự động mở trình duyệt nếu chạy local
+    if 'PORT' not in os.environ:
+        threading.Thread(target=open_browser, daemon=True).start()
     
     # Khởi chạy server
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=False)
